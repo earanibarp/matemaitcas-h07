@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://gem/Gem.tscn" type="PackedScene" id=2]
 [ext_resource path="res://main/Main.gd" type="Script" id=3]
-[ext_resource path="res://assets/Kenney Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/misc/Kenney Bold.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://main/HUD.gd" type="Script" id=5]
 [ext_resource path="res://enemy/Enemy.tscn" type="PackedScene" id=6]
 
@@ -19,6 +19,15 @@ font_data = ExtResource( 4 )
 size = 25
 extra_spacing_space = 15
 font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 77, 10 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 13, 150 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 13.5, 161 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
@@ -53,19 +62,16 @@ margin_bottom = 39.0
 custom_fonts/font = SubResource( 2 )
 text = "0"
 
-[node name="GameTimer" type="Timer" parent="."]
-autostart = true
-
-[node name="LabelGameOver" type="Label" parent="."]
+[node name="LabelGameOver" type="Label" parent="HUD"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 2.0
-margin_top = 294.0
-margin_right = 482.0
-margin_bottom = 404.0
+margin_left = -238.0
+margin_top = 274.0
+margin_right = 242.0
+margin_bottom = 384.0
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -73,8 +79,32 @@ text = "GAME OVER!!"
 align = 1
 valign = 1
 
+[node name="GameTimer" type="Timer" parent="."]
+autostart = true
+
 [node name="Enemy" parent="." instance=ExtResource( 6 )]
 position = Vector2( 238, 207 )
 
+[node name="Platform" type="StaticBody2D" parent="."]
+position = Vector2( 177, 256 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+position = Vector2( 67, 0 )
+shape = SubResource( 4 )
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
+position = Vector2( -4, 171 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+position = Vector2( 488, 166 )
+shape = SubResource( 6 )
+
+[connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
 [connection signal="picked" from="Player" to="." method="_on_Player_picked"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]

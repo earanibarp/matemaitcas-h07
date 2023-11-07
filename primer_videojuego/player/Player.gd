@@ -1,6 +1,7 @@
 extends Area2D
 
 signal picked
+signal hurt
 
 func _ready():
 	OS.center_window() # centrar la pantalla
@@ -9,19 +10,19 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_pressed("ui_left"):
-		position.x += -200 * delta
+		position.x += -250 * delta
 		$AnimatedSprite.flip_h = true
 		
 	if Input.is_action_pressed("ui_right"):
-		position.x += 200 * delta
+		position.x += 250 * delta
 		$AnimatedSprite.flip_h = false
 
 		
 	if Input.is_action_pressed("ui_up"):
-		position.y += -200 * delta
+		position.y += -250 * delta
 		
 	if Input.is_action_pressed("ui_down"):
-		position.y += 200 * delta
+		position.y += 250 * delta
 		
 	process_animations()
 	
@@ -48,6 +49,14 @@ func _on_Player_area_entered(area):
 		emit_signal("picked")
 		$GemAudio.play()
 		
+
+
+
 func game_over():
 	set_process(false)
 	$AnimatedSprite.play("hurt")
+
+
+func _on_Player_body_entered(body):
+	if body.is_in_group("enemy"):
+		emit_signal("hurt")

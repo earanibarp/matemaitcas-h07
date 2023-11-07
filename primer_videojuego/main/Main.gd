@@ -11,7 +11,7 @@ func _ready():
 	spawn_gems()
 	time_left = 15
 	$HUD.update_timer(time_left)
-	$LabelGameOver.visible = false
+	$HUD/LabelGameOver.visible = false
 
 func spawn_gems():
 	if Gem != null:
@@ -22,11 +22,15 @@ func spawn_gems():
 	
 	
 func _process(delta):
+	update_platform_position()
+
 	if $GemContainer.get_child_count() == 0:
 		level += 1
 		spawn_gems()
 		time_left += 5
 
+func update_platform_position():
+	$Platform.position.x = $Enemy.position.x
 
 func _on_GameTimer_timeout():
 	time_left -= 1
@@ -41,5 +45,9 @@ func _on_Player_picked():
 	
 func game_over():
 	$GameTimer.stop()
-	$LabelGameOver.visible = true
+	$HUD/LabelGameOver.visible = true
 	$Player.game_over()
+
+
+func _on_Player_hurt():
+	game_over()
