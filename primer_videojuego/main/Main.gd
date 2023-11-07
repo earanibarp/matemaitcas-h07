@@ -29,7 +29,7 @@ func _process(delta):
 		spawn_gems()
 		time_left += 5
 
-func update_platform_position():
+func update_platform_position(): # función para que la plataforma siga al enemigo
 	$Platform.position.x = $Enemy.position.x
 
 func _on_GameTimer_timeout():
@@ -47,7 +47,10 @@ func game_over():
 	$GameTimer.stop()
 	$HUD/LabelGameOver.visible = true
 	$Player.game_over()
+	yield(get_tree().create_timer(1.5), "timeout") # Crea temporizador de 1.5 seg
+	get_tree().change_scene("res://menu/Menu.tscn") # Vuelve a la escena principal
 
 
 func _on_Player_hurt():
 	game_over()
+	
