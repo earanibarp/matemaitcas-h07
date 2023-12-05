@@ -3,7 +3,7 @@ extends KinematicBody2D
 var speed = 150
 var speed_acelerate = 225
 var velocity = Vector2.ZERO
-var jump_s = -100
+var jump_s = -150
 var jump_b = -250
 var gravity = 500 
 
@@ -70,3 +70,8 @@ func _physics_process(delta):
 		
 	if state in [IDLE, RUN] and !is_on_floor():
 		transition_to(JUMP)
+
+
+func _on_Area2D_body_entered(body):
+	if body.is_in_group("bricks"):
+		body.bump()
